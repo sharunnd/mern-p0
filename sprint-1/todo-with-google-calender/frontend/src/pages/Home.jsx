@@ -68,9 +68,40 @@ export const Home = () => {
     const obj = {
       status: statusValue ? false : true
     };
-    console.log(obj,id)
+    
     axios
       .patch(`http://localhost:8080/todo/update/${id}`, obj, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        toast({
+          position: "top",
+          title: `${res.data.msg}`,
+          status: "success",
+          duration: 1000,
+          isClosable: true,
+        });
+        console.log(res);
+      })
+      .catch((err) => {
+        toast({
+          position: "top",
+          title: `${err.response.data.msg}`,
+          status: "error",
+          duration: 1000,
+          isClosable: true,
+        });
+        console.log(err);
+      });
+  };
+  const handleDelete = (id) => {
+    
+    
+    axios
+      .delete(`http://localhost:8080/todo/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -109,8 +140,7 @@ export const Home = () => {
                 <Flex mb={2}>
                 <Input type="text" value={item.title} />
                 <Button onClick={()=>handleEdit(item._id,item.status)}>{item.status ? "Completed" : "Pending"}</Button>
-                <IconButton  icon={<BiEdit />} />
-                <IconButton icon={<RxCross1 />} />
+                <IconButton icon={<RxCross1 />} onClick={()=>handleDelete(item._id)}/>
                 </Flex>
             ))
          }
