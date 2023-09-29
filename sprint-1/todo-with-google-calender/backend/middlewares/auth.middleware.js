@@ -8,8 +8,10 @@ const auth = (req,res,next)=>{
     if(token){
         try {
             const decoded = jwt.verify(token, `${process.env.SECRET_KEY}`)
+            console.log(decoded)
             if(decoded){
                 req.body.userID = decoded.userID
+                req.body.user = decoded.user 
                 next()
             }else{
                 res.status(400).json({msg:"Not Authorized!"})

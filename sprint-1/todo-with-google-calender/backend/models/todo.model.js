@@ -1,19 +1,21 @@
 const mongoose = require("mongoose")
 
 
-const userSchema = mongoose.Schema({
+const todoSchema = mongoose.Schema({
     title: String,
     desc: String,
     status: Boolean,
-    priority: String
+    priority: String,
+    userID:String,
+    user: String
 },{
     versionKey: false
 })
 
 
-const UserModel = mongoose.model("user",userSchema)
+const TodoModel = mongoose.model("todo",todoSchema)
 
 
 module.exports = {
-    UserModel
+    TodoModel
 }

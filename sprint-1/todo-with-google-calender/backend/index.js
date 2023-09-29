@@ -2,7 +2,8 @@ const express = require("express")
 const { connectDB } = require("./db");
 const { userRouter } = require("./routes/user.routes");
 require("dotenv").config();
-const cors = require("cors")
+const cors = require("cors");
+const { todoRouter } = require("./routes/todo.routes");
 const app = express()
 
 
@@ -10,6 +11,8 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/users",userRouter)
+app.use("/todo",todoRouter)
+
 app.get("/",async(req,res)=>{
     res.send("hi")
 })
