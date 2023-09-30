@@ -13,8 +13,6 @@ import {
     useMediaQuery,
   } from "@chakra-ui/react";
   import Cookies from "js-cookie";
-  import { useEffect, useRef, useState } from "react";
-  import { useDispatch, useSelector } from "react-redux";
   import { Link, useNavigate } from "react-router-dom";
 
   import { HamburgerIcon } from "@chakra-ui/icons";
@@ -22,21 +20,12 @@ import {
   export const Navbar = () => {
     
     const token = Cookies.get("token");
-    const dispatch = useDispatch();
+    
     const toast = useToast();
-    const [query, setQuery] = useState("");
-    const ref = useRef();
+    
     const userRole = Cookies.get("role");
     const navigate = useNavigate();
-    const paramObj = {
-      params: {
-        query: query && query,
-      },
-    };
-  
-    useEffect(() => {
-     
-    }, []);
+   
   
     const handleLogout = () => {
       Cookies.remove("role");
