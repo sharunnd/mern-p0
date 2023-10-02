@@ -43,7 +43,7 @@ import { REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS } from "../redux/s
       
       dispatch({ type: REGISTER_REQUEST });
       axios
-        .post(`http://localhost:8080/users/signup`, regData)
+        .post(`https://todo-with-google-calender.onrender.com/users/signup`, regData)
         .then((res) => {
             dispatch({ type: REGISTER_SUCCESS });
           toast({

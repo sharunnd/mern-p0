@@ -6,14 +6,13 @@ import Cookies from "js-cookie";
 export const AddTodo =(data)=>(dispatch)=>{
     const token = Cookies.get("token");
     dispatch({type:ADD_TODO_REQUEST})
-    return axios.post(`http://localhost:8080/todo/create`,data,{
+    return axios.post(`https://todo-with-google-calender.onrender.com/todo/create`,data,{
         headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
     }).then((res)=>{
         dispatch({type:ADD_TODO_SUCCESS,payload:res.data})
-        console.log(res);
         return res
     })
     .catch((err)=>{

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export const getAllTodos =(dispatch)=>{
     const token = Cookies.get("token");
     dispatch({type:GET_TODO_REQUEST})
-    axios.get(`http://localhost:8080/todo`,{
+    axios.get(`https://todo-with-google-calender.onrender.com/todo`,{
         headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

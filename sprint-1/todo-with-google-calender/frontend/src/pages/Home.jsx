@@ -21,18 +21,21 @@ export const Home = () => {
   const todos = useSelector((store) => store.todoReducer.todos);
   const addedTodo = useSelector((store) => store.addTodoReducer.todo);
   const token = Cookies.get("token");
+
   useEffect(() => {
     dispatch(getAllTodos)
-  }, [addedTodo]);
+    
+  }, [addedTodo,dispatch]);
 
   const handleAdd = ()=>{
+    console.log("Before dispatching AddTodo action");
     const obj = {
         title
     }
     
     dispatch(AddTodo(obj))
       .then((res) => {
-        setTitle("")
+        console.log("AddTodo action dispatched successfully");
         toast({
           position: "top",
           title: `${res.data.msg}`,
@@ -40,8 +43,10 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
+        setTitle("")
       })
       .catch((err) => {
+        console.log("Error dispatching AddTodo action", err);
         toast({
           position: "top",
           title: `Try another image`,
@@ -51,7 +56,10 @@ export const Home = () => {
         });
         console.log(err);
       });
-      setTitle("")
+      console.log("Before resetting title state");
+  setTitle(""); // Resetting title state
+
+  console.log("After resetting title state");
   }
 
   const handleEdit = (id, statusValue) => {
@@ -60,7 +68,7 @@ export const Home = () => {
     };
     
     axios
-      .patch(`http://localhost:8080/todo/update/${id}`, obj, {
+      .patch(`https://todo-with-google-calender.onrender.com/todo/update/${id}`, obj, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -74,6 +82,7 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
+        dispatch(getAllTodos)
         console.log(res);
       })
       .catch((err) => {
@@ -91,7 +100,7 @@ export const Home = () => {
     
     
     axios
-      .delete(`http://localhost:8080/todo/delete/${id}`, {
+      .delete(`https://todo-with-google-calender.onrender.com/todo/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -105,6 +114,7 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
+        dispatch(getAllTodos)
         console.log(res);
       })
       .catch((err) => {
@@ -121,15 +131,15 @@ export const Home = () => {
   return <Box width={"50%"} m={"auto"} mt={50}>
        <Box mb={50}>
          <Flex >
-         <Input type="text" placeholder="Add Todo" onChange={(e)=>setTitle(e.target.value)}/> 
+         <Input type="text" placeholder="Add Todo" value={title} onChange={(e)=>setTitle(e.target.value)}/> 
          <Button onClick={handleAdd}>Add</Button>
          </Flex>
        </Box>
     {
             todos && todos.map((item)=>(
-                <Flex mb={2}>
-                <Input type="text" value={item.title} />
-                <Button onClick={()=>handleEdit(item._id,item.status)}>{item.status ? "Completed" : "Pending"}</Button>
+                <Flex mb={2} key={item._id}>
+                <Input type="text" defaultValue={item.title} />
+                <Button onClick={()=>handleEdit(item._id,item.status)} mx={5}>{item.status ? "Completed" : "Pending"}</Button>
                 <IconButton icon={<RxCross1 />} onClick={()=>handleDelete(item._id)}/>
                 </Flex>
             ))
