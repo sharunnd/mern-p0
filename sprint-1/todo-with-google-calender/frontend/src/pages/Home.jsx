@@ -15,7 +15,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const Home = () => {
-    const [title,setTitle] = useState("")
+  const [title, setTitle] = useState("");
   const dispatch = useDispatch();
   const toast = useToast();
   const todos = useSelector((store) => store.todoReducer.todos);
@@ -23,19 +23,16 @@ export const Home = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
-    dispatch(getAllTodos)
-    
-  }, [addedTodo,dispatch]);
+    dispatch(getAllTodos);
+  }, [addedTodo, dispatch]);
 
-  const handleAdd = ()=>{
-    console.log("Before dispatching AddTodo action");
+  const handleAdd = () => {
     const obj = {
-        title
-    }
-    
+      title,
+    };
+
     dispatch(AddTodo(obj))
       .then((res) => {
-        console.log("AddTodo action dispatched successfully");
         toast({
           position: "top",
           title: `${res.data.msg}`,
@@ -43,10 +40,9 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
-        setTitle("")
+        setTitle("");
       })
       .catch((err) => {
-        console.log("Error dispatching AddTodo action", err);
         toast({
           position: "top",
           title: `Try another image`,
@@ -56,24 +52,26 @@ export const Home = () => {
         });
         console.log(err);
       });
-      console.log("Before resetting title state");
-  setTitle(""); // Resetting title state
 
-  console.log("After resetting title state");
-  }
+    setTitle(""); // Resetting title state
+  };
 
   const handleEdit = (id, statusValue) => {
     const obj = {
-      status: statusValue ? false : true
+      status: statusValue ? false : true,
     };
-    
+
     axios
-      .patch(`https://todo-with-google-calender.onrender.com/todo/update/${id}`, obj, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .patch(
+        `https://todo-with-google-calender.onrender.com/todo/update/${id}`,
+        obj,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         toast({
           position: "top",
@@ -82,7 +80,7 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
-        dispatch(getAllTodos)
+        dispatch(getAllTodos);
         console.log(res);
       })
       .catch((err) => {
@@ -97,15 +95,16 @@ export const Home = () => {
       });
   };
   const handleDelete = (id) => {
-    
-    
     axios
-      .delete(`https://todo-with-google-calender.onrender.com/todo/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .delete(
+        `https://todo-with-google-calender.onrender.com/todo/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         toast({
           position: "top",
@@ -114,7 +113,7 @@ export const Home = () => {
           duration: 1000,
           isClosable: true,
         });
-        dispatch(getAllTodos)
+        dispatch(getAllTodos);
         console.log(res);
       })
       .catch((err) => {
@@ -128,21 +127,32 @@ export const Home = () => {
         console.log(err);
       });
   };
-  return <Box width={"50%"} m={"auto"} mt={50}>
-       <Box mb={50}>
-         <Flex >
-         <Input type="text" placeholder="Add Todo" value={title} onChange={(e)=>setTitle(e.target.value)}/> 
-         <Button onClick={handleAdd}>Add</Button>
-         </Flex>
-       </Box>
-    {
-            todos && todos.map((item)=>(
-                <Flex mb={2} key={item._id}>
-                <Input type="text" defaultValue={item.title} />
-                <Button onClick={()=>handleEdit(item._id,item.status)} mx={5}>{item.status ? "Completed" : "Pending"}</Button>
-                <IconButton icon={<RxCross1 />} onClick={()=>handleDelete(item._id)}/>
-                </Flex>
-            ))
-         }
-  </Box>;
+  return (
+    <Box width={"50%"} m={"auto"} mt={50}>
+      <Box mb={50}>
+        <Flex>
+          <Input
+            type="text"
+            placeholder="Add Todo"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Button onClick={handleAdd}>Add</Button>
+        </Flex>
+      </Box>
+      {todos &&
+        todos.map((item) => (
+          <Flex mb={2} key={item._id}>
+            <Input type="text" defaultValue={item.title} />
+            <Button onClick={() => handleEdit(item._id, item.status)} mx={5}>
+              {item.status ? "Completed" : "Pending"}
+            </Button>
+            <IconButton
+              icon={<RxCross1 />}
+              onClick={() => handleDelete(item._id)}
+            />
+          </Flex>
+        ))}
+    </Box>
+  );
 };
